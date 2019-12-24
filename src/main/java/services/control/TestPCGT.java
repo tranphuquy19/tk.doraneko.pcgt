@@ -6,6 +6,7 @@ import services.excel.ExportDataToExcelUtil;
 import services.excel.GetData;
 import services.excel.ReadExcelUtil;
 import services.model.PC;
+import services.model.PT;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ public class TestPCGT {
         pcgt.setGts(GetData.getGts(gtRows));
         pcgt.setPts(GetData.getPts(ptRows));
         pcgt.phanCong();
-        ExportDataToExcelUtil excelFile = new ExportDataToExcelUtil("C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\test-all.xls", (ArrayList<PC>) pcgt.getPcs(), pcgt.getTempGtsLinked());
+        ExportDataToExcelUtil excelFile = new ExportDataToExcelUtil("C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\test-all.xlsx", (ArrayList<PC>) pcgt.getPcs(), pcgt.getTempGtsLinked(), (ArrayList<PT>) pcgt.getPts());
+        excelFile.createFile();
         int a = 0;
 
     }

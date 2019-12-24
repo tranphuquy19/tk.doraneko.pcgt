@@ -14,24 +14,24 @@ import java.util.List;
  * @since 12/24/2019
  */
 public class PCGT {
-    private static List<GT> gts = new ArrayList<>();
-    private static List<PT> pts = new ArrayList<>();
-    private static List<PC> pcs = new ArrayList<>();
+    private List<GT> gts = new ArrayList<>();
+    private List<PT> pts = new ArrayList<>();
+    private List<PC> pcs = new ArrayList<>();
 
-    private static LinkedList<GT> gtsLinked = new LinkedList<>();
-    private static LinkedList<PT> ptsLinked = new LinkedList<>();
-    private static LinkedList<GT> tempGtsLinked = new LinkedList<>();
+    private LinkedList<GT> gtsLinked = new LinkedList<>();
+    private LinkedList<PT> ptsLinked = new LinkedList<>();
+    private LinkedList<GT> tempGtsLinked = new LinkedList<>();
 
-    public static <T> List<T> convertToLinkedList(List<T> list) {
+    public <T> List<T> convertToLinkedList(List<T> list) {
         List<T> lL = new LinkedList<>(list);
         return lL;
     }
 
-    public static boolean checkQuantity() {
+    public boolean checkQuantity() {
         return true;
     }
 
-    private static long giaiThua(int n) {
+    private long giaiThua(int n) {
         long count = 1;
         for (int i = 2; i <= n; i++) {
             count *= i;
@@ -39,11 +39,11 @@ public class PCGT {
         return count;
     }
 
-    private static long cKn(int k, int n) {
+    private long cKn(int k, int n) {
         return giaiThua(n) / (giaiThua(k) * giaiThua(n - k));
     }
 
-    public static long getLoopCount() {
+    public long getLoopCount() {
         long value = cKn(2, gtsLinked.size());
         return value <= 0 ? Long.MAX_VALUE : value;
     }
@@ -143,36 +143,36 @@ public class PCGT {
         this.ptsLinked = ptsLink;
     }
 
-    public static List<PC> getPcs() {
-        return pcs;
+    public List<PC> getPcs() {
+        return this.pcs;
     }
 
-    public static void setPcs(List<PC> pcs) {
-        PCGT.pcs = pcs;
+    public void setPcs(List<PC> pcs) {
+        this.pcs = pcs;
     }
 
-    public static LinkedList<GT> getGtsLinked() {
+    public LinkedList<GT> getGtsLinked() {
         return gtsLinked;
     }
 
-    public static void setGtsLinked(LinkedList<GT> gtsLinked) {
-        PCGT.gtsLinked = gtsLinked;
+    public void setGtsLinked(LinkedList<GT> gtsLinked) {
+        this.gtsLinked = gtsLinked;
     }
 
-    public static LinkedList<PT> getPtsLinked() {
+    public LinkedList<PT> getPtsLinked() {
         return ptsLinked;
     }
 
-    public static void setPtsLinked(LinkedList<PT> ptsLinked) {
-        PCGT.ptsLinked = ptsLinked;
+    public void setPtsLinked(LinkedList<PT> ptsLinked) {
+        this.ptsLinked = ptsLinked;
     }
 
-    public static LinkedList<GT> getTempGtsLinked() {
+    public LinkedList<GT> getTempGtsLinked() {
         return tempGtsLinked;
     }
 
-    public static void setTempGtsLinked(LinkedList<GT> tempGtsLinked) {
-        PCGT.tempGtsLinked = tempGtsLinked;
+    public void setTempGtsLinked(LinkedList<GT> tempGtsLinked) {
+        this.tempGtsLinked = tempGtsLinked;
     }
 
 }
