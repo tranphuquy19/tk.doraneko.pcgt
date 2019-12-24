@@ -1,15 +1,13 @@
 package services.control;
 
-import commons.Constants;
-import org.apache.poi.ss.usermodel.Row;
-import services.excel.GetData;
-import services.excel.ReadExcelUtil;
 import services.model.GT;
 import services.model.PC;
 import services.model.PT;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
  * @author tranphuquy19@gmail.com
@@ -56,7 +54,7 @@ public class PCGT {
         return true;
     }
 
-    public static void phanCong() {
+    public void phanCong() {
         if (checkQuantity()) {
             long count = 1;
             gtsLinked = (LinkedList<GT>) convertToLinkedList(gts);
@@ -65,7 +63,7 @@ public class PCGT {
             long loops = getLoopCount();
             while (count <= loops) {
                 System.out.println(count + " " + ptsLinked.size() + " " + gtsLinked.size());
-                if(gtsLinked.size() % 2 != 0){
+                if (gtsLinked.size() % 2 != 0) {
                     tempGtsLinked.add(gtsLinked.getFirst());
                     gtsLinked.removeFirst();
                 }
@@ -101,17 +99,17 @@ public class PCGT {
         int a = 0;
     }
 
-    public static void main(String[] args) throws IOException {
-        String filePath = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\test.xlsx";
-        ReadExcelUtil readExcelUtil = new ReadExcelUtil(filePath);
-        Iterator<Row> gtRows = readExcelUtil.getRows(readExcelUtil.getSheetByName(Constants.GT_SHEET_NAME));
-        Iterator<Row> ptRows = readExcelUtil.getRows(readExcelUtil.getSheetByName(Constants.PT_SHEET_NAME));
-        gts = GetData.getGts(gtRows);
-        pts = GetData.getPts(ptRows);
-        phanCong();
-        int a = 0;
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        String filePath = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\test.xlsx";
+//        ReadExcelUtil readExcelUtil = new ReadExcelUtil(filePath);
+//        Iterator<Row> gtRows = readExcelUtil.getRows(readExcelUtil.getSheetByName(Constants.GT_SHEET_NAME));
+//        Iterator<Row> ptRows = readExcelUtil.getRows(readExcelUtil.getSheetByName(Constants.PT_SHEET_NAME));
+//        gts = GetData.getGts(gtRows);
+//        pts = GetData.getPts(ptRows);
+//        phanCong();
+//        int a = 0;
+//
+//    }
 
     public List<GT> getGts() {
         return gts;
@@ -168,4 +166,13 @@ public class PCGT {
     public static void setPtsLinked(LinkedList<PT> ptsLinked) {
         PCGT.ptsLinked = ptsLinked;
     }
+
+    public static LinkedList<GT> getTempGtsLinked() {
+        return tempGtsLinked;
+    }
+
+    public static void setTempGtsLinked(LinkedList<GT> tempGtsLinked) {
+        PCGT.tempGtsLinked = tempGtsLinked;
+    }
+
 }

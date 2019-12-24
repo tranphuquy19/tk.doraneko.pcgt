@@ -20,4 +20,13 @@ public class Constants {
     public static final int PT_ADDRESS = 1;
     public static final int PT_NOTES = 2;
 
+    public static final int PC_INDEX = 0;
+    public static final int PC_CARD_INDEX = 1;
+    public static final int PC_NAME = 2;
+    public static final int PC_DOB = 3;
+    public static final int PC_ADDRESS = 4;
+    public static final int PC_PT = 5;
+    public static final int PC_ROLE = 6;
+    public static final int PC_NOTE = 7;
+
 }
