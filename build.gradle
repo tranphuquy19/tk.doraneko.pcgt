@@ -13,7 +13,7 @@ repositories {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'app.Main'
+                'Main-Class': 'gui.ClientFrame'
         )
     }
 }

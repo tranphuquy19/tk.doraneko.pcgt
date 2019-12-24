@@ -71,7 +71,8 @@ public class Client {
 
                 byte[] recvBuff = Packet.readStream(dataInputStream);
 
-                switch (new String(cmdBuff)) {
+                String cmd = new String(cmdBuff);
+                switch (cmd) {
                     case Packet.COMMAND_REQUEST_SEND_FILE_DATA:
                         currentFilePointer = Long.valueOf(new String(recvBuff));
                         long residualLen = randomAccessFile.length() - currentFilePointer; //phần dư ra sau khi cắt file
@@ -86,11 +87,17 @@ public class Client {
                             dataOutputStream.flush();
 
                             float percent = ((float) (currentFilePointer + tempBuff.length) / randomAccessFile.length()) * 100;
-                            clientGui.getProgressBar().setValue((int) percent);
-                            clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "Upload percentage: " + percent + "%\n");
-                            if((int)percent == 100)
-                                clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "Opening Excel Files");
-                            clientGui.getScrollPane().getVerticalScrollBar().setValue(clientGui.getScrollPane().getVerticalScrollBar().getMaximum());
+                            try{
+                                clientGui.getProgressBar().setValue((int) percent);
+                                clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "Upload percentage: " + percent + "%\n");
+                                if((int)percent == 100)
+                                    clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "The server is processing, please wait a few seconds...\n" +
+                                            "The server has finished processing\n" +
+                                            "opening result file\n");
+                                clientGui.getScrollPane().getVerticalScrollBar().setValue(clientGui.getScrollPane().getVerticalScrollBar().getMaximum());
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         } else {
                             loopBreak = true;
                         }
@@ -120,7 +127,7 @@ public class Client {
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-
+        cmdArgs = "true";
         if (!cmdArgs.isEmpty()) {
             String temp = cmdArgs;
             if ("true".equals(temp)) {

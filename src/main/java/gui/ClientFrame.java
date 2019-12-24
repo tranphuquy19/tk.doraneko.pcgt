@@ -32,8 +32,19 @@ public class ClientFrame extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        Server server = new Server(Constants.CLIENT_CHANNEL, Constants.CLIENT_RES);
-        server.setForClient(true);
+        Thread serverThread = new Thread(){
+            @Override
+            public void run() {
+                Server server = null;
+                try {
+                    server = new Server(Constants.CLIENT_CHANNEL, Constants.CLIENT_RES);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                server.setForClient(true);
+            }
+        };
+        serverThread.start();
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {

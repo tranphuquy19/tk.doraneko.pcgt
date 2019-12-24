@@ -41,7 +41,7 @@ public class Server implements Runnable {
 
     private void open() throws IOException {
         serverSocket = new ServerSocket(this.port);
-//        System.out.println("Server is open on port: " + this.port);
+        System.out.println("Server is open on port: " + this.port);
     }
 
     private void start() {
@@ -52,8 +52,8 @@ public class Server implements Runnable {
     }
 
     private void addThread(Socket socket) throws IOException {
-//        System.out.println("Client is accepted");
-//        System.out.println("Socket: " + socket);
+        System.out.println("Client is accepted");
+        System.out.println("Socket: " + socket);
         serverThread = new ServerThread(socket);
         serverThread.open();
         serverThread.start();
@@ -74,7 +74,7 @@ public class Server implements Runnable {
         }
 
         public void run() {
-//            System.out.println("Listening client");
+            System.out.println("Listening client");
             RandomAccessFile randomAccessFile = null;
             long currentFilePointer = 0;
             String fileName = "";
@@ -83,13 +83,15 @@ public class Server implements Runnable {
 
             while (!socket.isClosed()) {
                 try {
+                    boolean closed = socket.isClosed();
                     if (dataInputStream.readByte() == Packet.INITIALIZE) {
                         int b = 0;
                         dataInputStream.readByte(); // tieu thu SEPARATOR
                         byte[] cmdBuff = new byte[3];
                         dataInputStream.read(cmdBuff, 0, cmdBuff.length);
                         byte[] recvData = Packet.readStream(dataInputStream);
-                        switch (new String(cmdBuff)) {
+                        String cmd = new String(cmdBuff);
+                        switch (cmd) {
                             case Packet.COMMAND_SEND_FILE_NAME:
                                 fileName = new String(recvData);
                                 randomAccessFile = new RandomAccessFile(workingDir + fileName, "rw");
@@ -104,22 +106,22 @@ public class Server implements Runnable {
                                 randomAccessFile.write(recvData);
                                 currentFilePointer = randomAccessFile.getFilePointer();
                                 float percent = ((float) currentFilePointer / fileLength) * 100;
-//                                System.out.println("Download percentage: " + percent + "%");
+                                System.out.println("Download percentage: " + percent + "%");
                                 dataOutputStream.write(Packet.createDataPacket(Packet.COMMAND_REQUEST_SEND_FILE_DATA, String.valueOf(currentFilePointer).getBytes("UTF8")));
                                 dataOutputStream.flush();
                                 break;
                             case Packet.COMMAND_SEND_FINISH:
-                                if(!forClient){
+                                if (!forClient) {
                                     String toFilename = MasterControl.excute(fileName, workingDir);
                                     Client client = new Client(socket.getInetAddress().getHostAddress(), Constants.CLIENT_CHANNEL);
                                     client.sendFile(workingDir + toFilename);
-                                }else{
+                                    if ("Close".equals(new String(recvData))) {
+                                        loopBreak = true;
+                                    }
+                                } else {
                                     File revFile = new File(Constants.CLIENT_RES + fileName);
                                     Desktop desktop = Desktop.getDesktop();
-                                    if(revFile.exists()) desktop.open(revFile);
-                                }
-                                if ("Close".equals(new String(recvData))) {
-                                    loopBreak = true;
+                                    if (revFile.exists()) desktop.open(revFile);
                                 }
                                 break;
                         }
@@ -130,6 +132,12 @@ public class Server implements Runnable {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    try {
+                        randomAccessFile.close();
+                        socket.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             } //end while
         }
