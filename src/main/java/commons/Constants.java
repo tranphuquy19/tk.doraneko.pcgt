@@ -17,6 +17,7 @@ public class Constants {
     public static final int GT_NOTES = 4;
 
     public static final int PT_NAME = 0;
-    public static final int PT_NOTES = 1;
+    public static final int PT_ADDRESS = 1;
+    public static final int PT_NOTES = 2;
 
 }

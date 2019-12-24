@@ -1,12 +1,14 @@
 package services.excel;
 
 import commons.Constants;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import services.model.GT;
 import services.model.PT;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -32,7 +34,7 @@ public class GetData {
                     gt.setName(CellUtil.getCellValue(cell));
                     break;
                 case Constants.GT_DOB:
-                    gt.setDob(CellUtil.getCellValue(cell));
+                    gt.setDob(HSSFDateUtil.isCellDateFormatted(cell) ? new SimpleDateFormat("dd/MM/yyyy").format(cell.getDateCellValue()) : " ");
                     break;
                 case Constants.GT_WORKPLACE:
                     gt.setWorkplace(CellUtil.getCellValue(cell));
@@ -67,11 +69,14 @@ public class GetData {
 
     private static PT getPt(Iterator<Cell> ptCells) {
         PT pt = new PT();
-        while(ptCells.hasNext()){
+        while (ptCells.hasNext()) {
             Cell cell = ptCells.next();
-            switch (cell.getColumnIndex()){
+            switch (cell.getColumnIndex()) {
                 case Constants.PT_NAME:
                     pt.setName(CellUtil.getCellValue(cell));
+                    break;
+                case Constants.PT_ADDRESS:
+                    pt.setAddress((CellUtil.getCellValue(cell)));
                     break;
                 case Constants.PT_NOTES:
                     pt.setNote(CellUtil.getCellValue(cell));

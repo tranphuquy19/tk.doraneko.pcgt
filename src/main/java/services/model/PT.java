@@ -6,13 +6,15 @@ package services.model;
  */
 public class PT {
     private String name;
+    private String address;
     private String note;
 
     public PT() {
     }
 
-    public PT(String name, String note) {
+    public PT(String name, String address, String note) {
         this.name = name;
+        this.address = address;
         this.note = note;
     }
 
@@ -32,10 +34,19 @@ public class PT {
         this.note = note;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "PT{" +
                 "name='" + name + '\'' +
+                ", address='" + address + '\'' +
                 ", note='" + note + '\'' +
                 '}';
     }
