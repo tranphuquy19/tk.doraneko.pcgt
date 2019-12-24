@@ -1,9 +1,10 @@
 package services.socket;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import commons.Constants;
+import services.control.MasterControl;
+
+import java.awt.*;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,6 +19,7 @@ public class Server implements Runnable {
 
     private int port;
     private String workingDir;
+    private boolean forClient = false;
 
     public Server(int port, String workingDir) throws IOException {
         this.port = port;
@@ -39,7 +41,7 @@ public class Server implements Runnable {
 
     private void open() throws IOException {
         serverSocket = new ServerSocket(this.port);
-        System.out.println("Server is open on port: " + this.port);
+//        System.out.println("Server is open on port: " + this.port);
     }
 
     private void start() {
@@ -50,8 +52,8 @@ public class Server implements Runnable {
     }
 
     private void addThread(Socket socket) throws IOException {
-        System.out.println("Client is accepted");
-        System.out.println("Socket: " + socket);
+//        System.out.println("Client is accepted");
+//        System.out.println("Socket: " + socket);
         serverThread = new ServerThread(socket);
         serverThread.open();
         serverThread.start();
@@ -72,7 +74,7 @@ public class Server implements Runnable {
         }
 
         public void run() {
-            System.out.println("Listening client");
+//            System.out.println("Listening client");
             RandomAccessFile randomAccessFile = null;
             long currentFilePointer = 0;
             String fileName = "";
@@ -90,7 +92,7 @@ public class Server implements Runnable {
                         switch (new String(cmdBuff)) {
                             case Packet.COMMAND_SEND_FILE_NAME:
                                 fileName = new String(recvData);
-                                randomAccessFile = new RandomAccessFile(workingDir + "/res/files/" + fileName, "rw");
+                                randomAccessFile = new RandomAccessFile(workingDir + fileName, "rw");
                                 dataOutputStream.write(Packet.createDataPacket(Packet.COMMAND_REQUEST_SEND_FILE_DATA, String.valueOf(currentFilePointer).getBytes("UTF8")));
                                 dataOutputStream.flush();
                                 break;
@@ -102,11 +104,20 @@ public class Server implements Runnable {
                                 randomAccessFile.write(recvData);
                                 currentFilePointer = randomAccessFile.getFilePointer();
                                 float percent = ((float) currentFilePointer / fileLength) * 100;
-                                System.out.println("Download percentage: " + percent + "%");
+//                                System.out.println("Download percentage: " + percent + "%");
                                 dataOutputStream.write(Packet.createDataPacket(Packet.COMMAND_REQUEST_SEND_FILE_DATA, String.valueOf(currentFilePointer).getBytes("UTF8")));
                                 dataOutputStream.flush();
                                 break;
                             case Packet.COMMAND_SEND_FINISH:
+                                if(!forClient){
+                                    String toFilename = MasterControl.excute(fileName, workingDir);
+                                    Client client = new Client(socket.getInetAddress().getHostAddress(), Constants.CLIENT_CHANNEL);
+                                    client.sendFile(workingDir + toFilename);
+                                }else{
+                                    File revFile = new File(Constants.CLIENT_RES + fileName);
+                                    Desktop desktop = Desktop.getDesktop();
+                                    if(revFile.exists()) desktop.open(revFile);
+                                }
                                 if ("Close".equals(new String(recvData))) {
                                     loopBreak = true;
                                 }
@@ -132,6 +143,54 @@ public class Server implements Runnable {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        new Server(16057, "/home/tranphuquy19/Documents/JavaNetworkProgramming");
+        new Server(Constants.SERVER_CHANNEL, Constants.SERVER_RES);
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    public Thread getThread() {
+        return thread;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
+    }
+
+    public ServerThread getServerThread() {
+        return serverThread;
+    }
+
+    public void setServerThread(ServerThread serverThread) {
+        this.serverThread = serverThread;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getWorkingDir() {
+        return workingDir;
+    }
+
+    public void setWorkingDir(String workingDir) {
+        this.workingDir = workingDir;
+    }
+
+    public boolean isForClient() {
+        return forClient;
+    }
+
+    public void setForClient(boolean forClient) {
+        this.forClient = forClient;
     }
 }

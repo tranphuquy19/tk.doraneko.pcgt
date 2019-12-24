@@ -29,4 +29,9 @@ public class Constants {
     public static final int PC_ROLE = 6;
     public static final int PC_NOTE = 7;
 
+    public static final int SERVER_CHANNEL = 16057;
+    public static final int CLIENT_CHANNEL = 16059;
+
+    public static final String SERVER_RES = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\res\\files\\server\\";
+    public static final String CLIENT_RES = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\res\\files\\client\\";
 }

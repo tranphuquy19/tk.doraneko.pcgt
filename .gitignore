@@ -1,3 +1,4 @@
 # Project exclude paths
 /.gradle/
 /~$test.xlsx
+/res/files/

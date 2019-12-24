@@ -1,6 +1,8 @@
 package services.socket;
 
 import commons.ConsoleColors;
+import commons.Constants;
+import gui.ClientFrame;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -21,10 +23,24 @@ public class Client {
 
     private String host;
     private int port;
+    private ClientFrame clientGui;
+
+    public Client(Socket socket) throws IOException {
+        this.socket = socket;
+        dataInputStream = new DataInputStream(socket.getInputStream());
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
+    }
 
     public Client(String host, int port) throws IOException {
         this.host = host;
         this.port = port;
+        start();
+    }
+
+    public Client(String host, int port, ClientFrame clientGui) throws IOException {
+        this.host = host;
+        this.port = port;
+        this.clientGui = clientGui;
         start();
     }
 
@@ -61,6 +77,7 @@ public class Client {
                         long residualLen = randomAccessFile.length() - currentFilePointer; //phần dư ra sau khi cắt file
                         int buffLen = (int) (residualLen < MAX_LENGTH_SEND ? residualLen : MAX_LENGTH_SEND); // tính toán phần data phải gửi
                         byte[] tempBuff = new byte[buffLen];
+
                         if (currentFilePointer != randomAccessFile.length()) { // == nếu con tro file nằm cuối file
                             randomAccessFile.seek(currentFilePointer);
                             randomAccessFile.read(tempBuff, 0, tempBuff.length); // fill vào mảng
@@ -69,7 +86,11 @@ public class Client {
                             dataOutputStream.flush();
 
                             float percent = ((float) (currentFilePointer + tempBuff.length) / randomAccessFile.length()) * 100;
-                            System.out.println("Upload percentage: " + percent + "%");
+                            clientGui.getProgressBar().setValue((int) percent);
+                            clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "Upload percentage: " + percent + "%\n");
+                            if((int)percent == 100)
+                                clientGui.getTxtStatus().setText(clientGui.getTxtStatus().getText() + "Opening Excel Files");
+                            clientGui.getScrollPane().getVerticalScrollBar().setValue(clientGui.getScrollPane().getVerticalScrollBar().getMaximum());
                         } else {
                             loopBreak = true;
                         }
@@ -88,6 +109,9 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Client client;
+        Server server = new Server(Constants.CLIENT_CHANNEL, Constants.CLIENT_RES);
+        server.setForClient(true);
+
         Scanner sc = new Scanner(System.in);
         String cmdArgs = null;
 
@@ -101,7 +125,7 @@ public class Client {
             String temp = cmdArgs;
             if ("true".equals(temp)) {
                 while (true) {
-                    client = new Client("0.0.0.0", 16057);
+                    client = new Client("0.0.0.0", Constants.SERVER_CHANNEL);
                     JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
                     int returnValue = jFileChooser.showOpenDialog(null);
                     if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -116,5 +140,45 @@ public class Client {
                 client.sendFile(temp);
             }
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public DataOutputStream getDataOutputStream() {
+        return dataOutputStream;
+    }
+
+    public void setDataOutputStream(DataOutputStream dataOutputStream) {
+        this.dataOutputStream = dataOutputStream;
+    }
+
+    public DataInputStream getDataInputStream() {
+        return dataInputStream;
+    }
+
+    public void setDataInputStream(DataInputStream dataInputStream) {
+        this.dataInputStream = dataInputStream;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

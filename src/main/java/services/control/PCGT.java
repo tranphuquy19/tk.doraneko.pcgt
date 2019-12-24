@@ -62,7 +62,7 @@ public class PCGT {
             Collections.shuffle(gtsLinked);
             long loops = getLoopCount();
             while (count <= loops) {
-                System.out.println(count + " " + ptsLinked.size() + " " + gtsLinked.size());
+//                System.out.println(count + " " + ptsLinked.size() + " " + gtsLinked.size());
                 if (gtsLinked.size() % 2 != 0) {
                     tempGtsLinked.add(gtsLinked.getFirst());
                     gtsLinked.removeFirst();

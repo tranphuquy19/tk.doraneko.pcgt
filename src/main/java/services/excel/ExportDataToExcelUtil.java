@@ -31,9 +31,11 @@ public class ExportDataToExcelUtil {
     }
 
     /**
-     * @param filePath filePath
-     * @param pcs      pcs
-     * @param gtHls    gtHls
+     *
+     * @param filePath
+     * @param pcs
+     * @param gtHls
+     * @param pts
      */
     public ExportDataToExcelUtil(String filePath, ArrayList<PC> pcs, LinkedList<GT> gtHls, ArrayList<PT> pts) {
         this.filePath = filePath;
@@ -122,12 +124,12 @@ public class ExportDataToExcelUtil {
             cell.setCellValue(gtItem.getDob());
             cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
             int ptIndex = gtHls.indexOf(gtItem) % arv;
-            System.out.println(ptIndex);
+//            System.out.println(ptIndex);
             cell.setCellValue(pts.get(ptIndex).getAddress());
             cell = row.createCell(Constants.PC_PT, CellType.STRING);
             cell.setCellValue(" ");
             cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-            cell.setCellValue("Giam thi hanh lan");
+            cell.setCellValue("Giam thi hanh lang");
             cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
             int nextIndex = 0;
             if (currentPT + arv * 2 + 1 >= pts.size()) {
