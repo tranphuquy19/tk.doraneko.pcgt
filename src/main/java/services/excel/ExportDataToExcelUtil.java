@@ -48,7 +48,6 @@ public class ExportDataToExcelUtil {
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet pcSheet = book.createSheet("PC");
 
-        //------------------ALL------------------------
         int rowIndex = 0;
         Cell cell;
         Row row;
@@ -61,7 +60,7 @@ public class ExportDataToExcelUtil {
         cell = row.createCell(3, CellType.STRING);
         cell.setCellValue(new String("    Dộc lập - Tự do - Hạnh phúc".getBytes(), "UTF-8"));
 
-        row = pcSheet.createRow(++rowIndex);
+        row = pcSheet.createRow(rowIndex);
 
         cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
         cell.setCellValue("TT");
@@ -83,7 +82,7 @@ public class ExportDataToExcelUtil {
         for (PC pcItem : pcs) {
             row = pcSheet.createRow(++rowIndex);
             cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
+            cell.setCellValue(rowIndex);
             cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
             cell.setCellValue(pcItem.getGt1().getCardIndex());
             cell = row.createCell(Constants.PC_NAME, CellType.STRING);
@@ -102,7 +101,7 @@ public class ExportDataToExcelUtil {
 
             row = pcSheet.createRow(++rowIndex);
             cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
+            cell.setCellValue(rowIndex + 1);
             cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
             cell.setCellValue(pcItem.getGt2().getCardIndex());
             cell = row.createCell(Constants.PC_NAME, CellType.STRING);
@@ -119,13 +118,12 @@ public class ExportDataToExcelUtil {
             cell.setCellValue(" ");
         }
 
-        //------------------GTHL ALL------------------------
-        int arv = (int) (pts.size() / gtHls.size());
+        int arv = ((int) pts.size() / gtHls.size());
         int currentPT = 1;
         for (GT gtItem : gtHls) {
             row = pcSheet.createRow(++rowIndex);
             cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
+            cell.setCellValue(rowIndex);
             cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
             cell.setCellValue(gtItem.getCardIndex());
             cell = row.createCell(Constants.PC_NAME, CellType.STRING);
@@ -147,163 +145,6 @@ public class ExportDataToExcelUtil {
             } else nextIndex = currentPT + arv;
             cell.setCellValue(pts.get(currentPT - 1).getName() + "-" + pts.get(nextIndex - 1).getName());
             if ((currentPT + arv * 2 < pts.size())) currentPT += arv;
-        }
-
-        rowIndex++;
-        rowIndex++;
-        row = pcSheet.createRow(++rowIndex);
-        cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue(new String("Chủ tich hội dồng thi".getBytes(), "UTF-8"));
-
-        row = pcSheet.createRow(++rowIndex);
-        cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue(new String("    Trần Văn Thi".getBytes(), "UTF-8"));
-
-        //------------------PCx------------------------
-        int countAll = pcs.size();
-        XSSFSheet _pcSheet = null;
-        rowIndex = 0;
-        for (int i = 0; i < countAll; i++) {
-            System.out.println(i);
-            PC pcItem = pcs.get(i);
-
-            String _name = "";
-            if (i % 10 == 0) {
-                _name = "PC" + book.getNumberOfSheets();
-
-                _pcSheet = book.createSheet(_name);
-                rowIndex = 0;
-                row = _pcSheet.createRow(rowIndex);
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue(new String("Cộng hòa Xã hội Chủ nghĩa Việt Nam".getBytes(), "UTF-8"));
-
-                row = _pcSheet.createRow(++rowIndex);
-                cell = row.createCell(3, CellType.STRING);
-                cell.setCellValue(new String("    Dộc lập - Tự do - Hạnh phúc".getBytes(), "UTF-8"));
-
-                row = _pcSheet.createRow(++rowIndex);
-                cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-                cell.setCellValue("TT");
-                cell = row.createCell(Constants.PC_CARD_INDEX, CellType.STRING);
-                cell.setCellValue("So The");
-                cell = row.createCell(Constants.PC_NAME, CellType.STRING);
-                cell.setCellValue(new String("Ho Tên".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_DOB, CellType.STRING);
-                cell.setCellValue(new String("Ngày sinh".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
-                cell.setCellValue(new String("Dơn vị công tác".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_PT, CellType.STRING);
-                cell.setCellValue(new String("Phòng thi".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-                cell.setCellValue(new String("Chức vụ".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
-                cell.setCellValue(new String("Ghi chú".getBytes(), "UTF-8"));
-            }
-
-            row = _pcSheet.createRow(++rowIndex);
-            cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
-            cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
-            cell.setCellValue(pcItem.getGt1().getCardIndex());
-            cell = row.createCell(Constants.PC_NAME, CellType.STRING);
-            cell.setCellValue(pcItem.getGt1().getName());
-            cell = row.createCell(Constants.PC_DOB, CellType.STRING);
-            cell.setCellValue(pcItem.getGt1().getDob());
-            cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
-            cell.setCellValue(pcItem.getPt().getAddress());
-            cell = row.createCell(Constants.PC_PT, CellType.STRING);
-            cell.setCellValue(pcItem.getPt().getName());
-            cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-            cell.setCellValue(new String("Giám thị 1".getBytes(), "UTF-8"));
-            cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
-//            cell.setCellValue(pcItem.getGt1().getNote());
-            cell.setCellValue(" ");
-
-            row = _pcSheet.createRow(++rowIndex);
-            cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
-            cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
-            cell.setCellValue(pcItem.getGt2().getCardIndex());
-            cell = row.createCell(Constants.PC_NAME, CellType.STRING);
-            cell.setCellValue(pcItem.getGt2().getName());
-            cell = row.createCell(Constants.PC_DOB, CellType.STRING);
-            cell.setCellValue(pcItem.getGt2().getDob());
-            cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
-            cell.setCellValue(pcItem.getPt().getAddress());
-            cell = row.createCell(Constants.PC_PT, CellType.STRING);
-            cell.setCellValue(pcItem.getPt().getName());
-            cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-            cell.setCellValue(new String("Giám thị 2".getBytes(), "UTF-8"));
-            cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
-//            cell.setCellValue(pcItem.getGt1().getNote());
-            cell.setCellValue(" ");
-        }
-
-        //------------------HL------------------------
-
-//        int hlCount = Math.min(gtHls.size(), 20);
-
-        XSSFSheet ___pcSheet = null;
-        int countHL = 0;
-        arv = ((int) pts.size() / gtHls.size());
-        currentPT = 1;
-        for (GT gtItem : gtHls) {
-            if (countHL % 20 == 0) {
-                ___pcSheet = book.createSheet("HL" + book.getNumberOfSheets());
-                rowIndex = 0;
-
-                row = ___pcSheet.createRow(rowIndex);
-                cell = row.createCell(2, CellType.STRING);
-                cell.setCellValue(new String("Cộng hòa Xã hội Chủ nghĩa Việt Nam".getBytes(), "UTF-8"));
-
-                row = ___pcSheet.createRow(++rowIndex);
-                cell = row.createCell(3, CellType.STRING);
-                cell.setCellValue(new String("    Dộc lập - Tự do - Hạnh phúc".getBytes(), "UTF-8"));
-
-                row = ___pcSheet.createRow(++rowIndex);
-
-                cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-                cell.setCellValue("TT");
-                cell = row.createCell(Constants.PC_CARD_INDEX, CellType.STRING);
-                cell.setCellValue("So The");
-                cell = row.createCell(Constants.PC_NAME, CellType.STRING);
-                cell.setCellValue(new String("Ho Tên".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_DOB, CellType.STRING);
-                cell.setCellValue(new String("Ngày sinh".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
-                cell.setCellValue(new String("Dơn vị công tác".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_PT, CellType.STRING);
-                cell.setCellValue(new String("Phòng thi".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-                cell.setCellValue(new String("Chức vụ".getBytes(), "UTF-8"));
-                cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
-                cell.setCellValue(new String("Ghi chú".getBytes(), "UTF-8"));
-            }
-            row = ___pcSheet.createRow(++rowIndex);
-            cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
-            cell.setCellValue(rowIndex - 2);
-            cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
-            cell.setCellValue(gtItem.getCardIndex());
-            cell = row.createCell(Constants.PC_NAME, CellType.STRING);
-            cell.setCellValue(gtItem.getName());
-            cell = row.createCell(Constants.PC_DOB, CellType.STRING);
-            cell.setCellValue(gtItem.getDob());
-            cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
-            int ptIndex = gtHls.indexOf(gtItem) % arv;
-//            System.out.println(ptIndex);
-            cell.setCellValue(pts.get(ptIndex).getAddress());
-            cell = row.createCell(Constants.PC_PT, CellType.STRING);
-            cell.setCellValue(" ");
-            cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
-            cell.setCellValue(new String("Giám thị hành lang".getBytes(), "UTF-8"));
-            cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
-            int nextIndex = 0;
-            if (currentPT + arv * 2 + 1 >= pts.size()) {
-                nextIndex = pts.size();
-            } else nextIndex = currentPT + arv;
-            cell.setCellValue(pts.get(currentPT - 1).getName() + "-" + pts.get(nextIndex - 1).getName());
-            if ((currentPT + arv * 2 < pts.size())) currentPT += arv;
-            countHL++;
         }
 
         File file = new File(this.filePath);
@@ -313,6 +154,61 @@ public class ExportDataToExcelUtil {
             System.out.println("Created File");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        int countAll = pcs.size() * 2 + gtHls.size();
+        for (int i = 0; i < ((int) countAll / 20); i++) {
+            System.out.println(i);
+            PC pcItem = pcs.get(i);
+            pcs.remove(pcItem);
+            XSSFSheet _pcSheet = book.createSheet("PC" + i % 20);
+
+            rowIndex = 0;
+
+            row = _pcSheet.createRow(rowIndex);
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue(new String("Cộng hòa Xã hội Chủ nghĩa Việt Nam".getBytes(), "UTF-8"));
+
+            row = pcSheet.createRow(++rowIndex);
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue(new String("    Dộc lập - Tự do - Hạnh phúc".getBytes(), "UTF-8"));
+
+            row = pcSheet.createRow(rowIndex);
+            cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
+            cell.setCellValue("TT");
+            cell = row.createCell(Constants.PC_CARD_INDEX, CellType.STRING);
+            cell.setCellValue("So The");
+            cell = row.createCell(Constants.PC_NAME, CellType.STRING);
+            cell.setCellValue(new String("Ho Tên".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_DOB, CellType.STRING);
+            cell.setCellValue(new String("Ngày sinh".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
+            cell.setCellValue(new String("Dơn vị công tác".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_PT, CellType.STRING);
+            cell.setCellValue(new String("Phòng thi".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
+            cell.setCellValue(new String("Chức vụ".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
+            cell.setCellValue(new String("Ghi chú".getBytes(), "UTF-8"));
+
+            row = pcSheet.createRow(++rowIndex);
+            cell = row.createCell(Constants.PC_INDEX, CellType.STRING);
+            cell.setCellValue(i % 20 + 1);
+            cell = row.createCell(Constants.PC_CARD_INDEX, CellType.NUMERIC);
+            cell.setCellValue(pcItem.getGt1().getCardIndex());
+            cell = row.createCell(Constants.PC_NAME, CellType.STRING);
+            cell.setCellValue(pcItem.getGt1().getName());
+            cell = row.createCell(Constants.PC_DOB, CellType.STRING);
+            cell.setCellValue(pcItem.getGt1().getDob());
+            cell = row.createCell(Constants.PC_ADDRESS, CellType.STRING);
+            cell.setCellValue(pcItem.getPt().getAddress());
+            cell = row.createCell(Constants.PC_PT, CellType.STRING);
+            cell.setCellValue(pcItem.getPt().getName());
+            cell = row.createCell(Constants.PC_ROLE, CellType.STRING);
+            cell.setCellValue(new String("Giám thị 1".getBytes(), "UTF-8"));
+            cell = row.createCell(Constants.PC_NOTE, CellType.STRING);
+//            cell.setCellValue(pcItem.getGt1().getNote());
+            cell.setCellValue(" ");
         }
     }
 

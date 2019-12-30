@@ -34,6 +34,4 @@ public class Constants {
 
     public static final String SERVER_RES = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\res\\files\\server\\";
     public static final String CLIENT_RES = "C:\\Users\\Tran Phu Quy\\Downloads\\tk.doraneko.pcgt\\res\\files\\client\\";
-//    public static final String CLIENT_RES = "G:\\";
-
 }

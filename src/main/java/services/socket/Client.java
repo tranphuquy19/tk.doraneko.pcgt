@@ -96,7 +96,7 @@ public class Client {
                                             "opening result file\n");
                                 clientGui.getScrollPane().getVerticalScrollBar().setValue(clientGui.getScrollPane().getVerticalScrollBar().getMaximum());
                             }catch (Exception e){
-//                                e.printStackTrace();
+                                e.printStackTrace();
                             }
                         } else {
                             loopBreak = true;

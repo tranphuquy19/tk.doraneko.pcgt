@@ -60,8 +60,7 @@ public class PCGT {
             gtsLinked = (LinkedList<GT>) convertToLinkedList(gts);
             ptsLinked = (LinkedList<PT>) convertToLinkedList(pts);
             Collections.shuffle(gtsLinked);
-//            long loops = getLoopCount();
-            long loops = Long.MAX_VALUE;
+            long loops = getLoopCount();
             while (count <= loops) {
 //                System.out.println(count + " " + ptsLinked.size() + " " + gtsLinked.size());
                 if (gtsLinked.size() % 2 != 0) {
